@@ -10,7 +10,7 @@
 -author("Louisa").
 
 %% API
--export([quicksortRekursiv/3]).
+-export([quicksortRekursiv/3, getArrayIndex/2]).
 
 
 quicksortRekursiv(Array, IndexLinks, IndexRechts) when IndexLinks < IndexRechts ->
@@ -97,3 +97,4 @@ getArrayIndex({First, _Second}, Elem, Accu) when First == Elem ->
 
 getArrayIndex({First, Second}, Elem, Accu) when First /= Elem ->
   getArrayIndex(Second, Elem, Accu +1).
+
