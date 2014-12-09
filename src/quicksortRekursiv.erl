@@ -89,8 +89,9 @@ quicksortRekursiv(Array, _IndexLinks, _IndexRechts) ->
 
 
 
-%% swapPivot: array x IndexLinks x IndexRechts -> IndexPivot
-%%
+%% swapPivot: array x IndexLinks x IndexRechts -> {Array, IndexPivot}
+%% berechnet Pivot, linken und Rechten Zeiger und gibt es an
+%% swapPivot/6 weiter.
 swapPivot(Array, IndexLinks, IndexRechts) ->
   L = IndexLinks + 1,
   R = IndexRechts,
@@ -98,24 +99,29 @@ swapPivot(Array, IndexLinks, IndexRechts) ->
   swapPivot(Array, L, R, IndexLinks, IndexRechts, Pivot).
 
 
-%% swapPivot: array x lpos x rpos x IndexLinks x IndexRechts x Pivot -> IndexPivot
+%% swapPivot: array x lpos x rpos x IndexLinks x IndexRechts x Pivot -> {Array, IndexPivot}
+%% Solange der linke Zeiger kleiner als der Rechte ist (links vom rechten Zeiger steht),
+%% soll der Platz für das Pivot gesucht werden mit Hilfe der Hilfsfunktion/Unterfunktion:
+%% swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot).
 swapPivot(Array, L, R, IndexLinks, IndexRechts, Pivot) when  L < R ->
   erlang:display(Array),
   swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot);
 
 
-%% wenn der linke zeiger (L) den Rechten übersprungen hat bzw. umgekehrt
+%% wenn der linke zeiger (L) den Rechten übersprungen hat bzw. umgekehrt,
+%% dann wurde der Platz für das Pivot gefunden und das Pivot wird mit dem
+%% dort stehenden Element getauscht.
 swapPivot(Array, L, _R, IndexLinks, _IndexRechts, Pivot) ->
   Elem = arrayS:getA(Array, L),
   erlang:display("Elem"),
   erlang:display(Elem),
   erlang:display("Pivot"),
   erlang:display(Pivot),
-  if(Elem >= Pivot) ->
-      erlang:display("elem >= pivot   "),
+  if(Elem > Pivot) ->
+      erlang:display("elem > pivot   "),
       Array1 = quicksortRandom:swap(Array, L-1, IndexLinks);
   true ->
-      erlang:display("elem < pivot   "),
+      erlang:display("elem =< pivot   "),
       Array1 = quicksortRandom:swap(Array, L, IndexLinks)
   end,
   erlang:display("Array1   "),
@@ -133,6 +139,15 @@ swapPivot(Array, L, _R, IndexLinks, _IndexRechts, Pivot) ->
     {Array1, IndexPivot}
   end.
 
+
+%% linke und rechter Zeiger werden hochgezählt bzw. verringert,
+%% bis der Wert auf den sie zeigen kleiner bzw größer als Pivot sind.
+%% (Wert von L darf nicht größer als Pivot sein, wenn größer, dann
+%%  wird nicht mehr erhöht,
+%%  Wert von R darf nicht kleiner als Pivot sein, wenn kleiner, dann
+%%  wird nicht mehr verringert
+%% Wenn der linke Zeiger kleiner als der Rechte ist (also links vom Rechten steht),
+%% dann werden die beiden Werte der Zeiger vertauscht, sonst wird einfach weitergegangen.
 swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot) ->
   NewL = increment_L(Array, L, IndexRechts, Pivot),
   NewR = increment_R(Array, R, IndexLinks, Pivot),
@@ -155,6 +170,8 @@ swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot) ->
 %%      - increment_R/4
 %%      - getArrayIndex/2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 %% increment_L: array x lpos x indexRechts x Pivot -> newLPos
 %% Pivot muss größer sein, all der Wert von Index lPos.
@@ -186,12 +203,21 @@ increment_R(Array, R, IndexLinks, Pivot) ->
 
 
 %% Hilfsfunktion wenn es ein Element zweimal im Array gibt
+%% Array: das Array, das nach dem Element durchsucht werden soll
+%% Elem: das gesuchte Element
+%% Von: Index von dem angefangen werden soll zu suchen
+%%   z.B. [1,3,5,2,6,4,8,7,3,9,5] => 3 gibt es zwei mal
+%%     Von: 3 (index 3 -> Zahl 2)
+%%     Die zweite 3 hat den Index 8
 getArrayIndex_(Array, Elem, Von) ->
   getArrayIndex(Array, Elem, Von, 0).
 
+%% wenn der Akku soweit die der angegeben Index hochgezählt wurde, kann
+%% an die ursprüngliche Funktion weiterdeligiert werden
 getArrayIndex(Array, Elem, Von, Accu) when Von == Accu ->
   getArrayIndex(Array, Elem, Accu);
 
+%% Akku hochzählen
 getArrayIndex({_F,R}, Elem, Von, Accu) ->
   getArrayIndex(R, Elem, Von, Accu+1).
 
@@ -209,9 +235,13 @@ getArrayIndex({First, Second}, Elem, Accu) when First /= Elem ->
 
 
 
+
+
+%% schreibt die benötigte Zeit in Millisekunden in die Datei messung.log
 writeToFile(Data, newline) ->
   file:write_file(logFile(), io_lib:fwrite("~p\t Millisekunden.\n",   [Data]), [append]);
 
+%% schreibt die Anzahl an Tausche in die Datei messung.log
 writeToFile(Data, sameline) ->
   file:write_file(logFile(), io_lib:fwrite("~p\t Tausche bei\t",   [Data]), [append]).
 
