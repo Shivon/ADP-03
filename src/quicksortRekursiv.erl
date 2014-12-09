@@ -10,7 +10,7 @@
 -author("Louisa").
 
 %% API
--export([quicksortRekursiv/4, quicksortRekursiv/3, quicksortRekursiv/0, quicksortRekursiv/1, getArrayIndex/2, increment_R/4, increment_L/4, swapPivot/3]).
+-export([quicksortRekursiv/4, quicksortRekursiv/3, quicksortRekursiv/0, quicksortRekursiv/1, increment_R/4, increment_L/4, swapPivot/3]).
 %% -include_lib("eunit/include/eunit.hrl").
 
 %% "Konstante"
@@ -119,25 +119,19 @@ swapPivot(Array, L, _R, IndexLinks, _IndexRechts, Pivot) ->
   erlang:display(Pivot),
   if(Elem > Pivot) ->
       erlang:display("elem > pivot   "),
-      Array1 = quicksortRandom:swap(Array, L-1, IndexLinks);
+      Array1 = quicksortRandom:swap(Array, L-1, IndexLinks),
+      IndexPivot = L-1;
   true ->
       erlang:display("elem =< pivot   "),
-      Array1 = quicksortRandom:swap(Array, L, IndexLinks)
+      Array1 = quicksortRandom:swap(Array, L, IndexLinks),
+      IndexPivot = L
   end,
   erlang:display("Array1   "),
   erlang:display(Array1),
   erlang:display("  "),
-  IndexPivot = getArrayIndex(Array1, Pivot),
-  if(IndexPivot < IndexLinks) ->
-    IndexPivot1 = getArrayIndex_(Array1, Pivot, IndexLinks),
-    erlang:display("IndexPivot1   "),
-    erlang:display(IndexPivot1),
-    {Array1, IndexPivot1};
-  true ->
-    erlang:display("IndexPivot   "),
-    erlang:display(IndexPivot),
-    {Array1, IndexPivot}
-  end.
+  erlang:display("IndexPivot   "),
+  erlang:display(IndexPivot),
+  {Array1, IndexPivot}.
 
 
 %% linke und rechter Zeiger werden hochgezählt bzw. verringert,
@@ -201,37 +195,37 @@ increment_R(Array, R, IndexLinks, Pivot) ->
  end.
 
 
-
-%% Hilfsfunktion wenn es ein Element zweimal im Array gibt
-%% Array: das Array, das nach dem Element durchsucht werden soll
-%% Elem: das gesuchte Element
-%% Von: Index von dem angefangen werden soll zu suchen
-%%   z.B. [1,3,5,2,6,4,8,7,3,9,5] => 3 gibt es zwei mal
-%%     Von: 3 (index 3 -> Zahl 2)
-%%     Die zweite 3 hat den Index 8
-getArrayIndex_(Array, Elem, Von) ->
-  getArrayIndex(Array, Elem, Von, 0).
-
-%% wenn der Akku soweit die der angegeben Index hochgezählt wurde, kann
-%% an die ursprüngliche Funktion weiterdeligiert werden
-getArrayIndex(Array, Elem, Von, Accu) when Von == Accu ->
-  getArrayIndex(Array, Elem, Accu);
-
-%% Akku hochzählen
-getArrayIndex({_F,R}, Elem, Von, Accu) ->
-  getArrayIndex(R, Elem, Von, Accu+1).
-
-
-%% getArrayIndex: array x pivot -> pos
-%% Hilfsfunktion um den Index eines bestimmten Elements zu bekommen
-getArrayIndex(Array, Elem) ->
-  getArrayIndex(Array, Elem, 0).
-
-getArrayIndex({First, _Second}, Elem, Accu) when First == Elem ->
-  Accu;
-
-getArrayIndex({First, Second}, Elem, Accu) when First /= Elem ->
-  getArrayIndex(Second, Elem, Accu +1).
+%%
+%% %% Hilfsfunktion wenn es ein Element zweimal im Array gibt
+%% %% Array: das Array, das nach dem Element durchsucht werden soll
+%% %% Elem: das gesuchte Element
+%% %% Von: Index von dem angefangen werden soll zu suchen
+%% %%   z.B. [1,3,5,2,6,4,8,7,3,9,5] => 3 gibt es zwei mal
+%% %%     Von: 3 (index 3 -> Zahl 2)
+%% %%     Die zweite 3 hat den Index 8
+%% getArrayIndex_(Array, Elem, Von) ->
+%%   getArrayIndex(Array, Elem, Von, 0).
+%%
+%% %% wenn der Akku soweit die der angegeben Index hochgezählt wurde, kann
+%% %% an die ursprüngliche Funktion weiterdeligiert werden
+%% getArrayIndex(Array, Elem, Von, Accu) when Von == Accu ->
+%%   getArrayIndex(Array, Elem, Accu);
+%%
+%% %% Akku hochzählen
+%% getArrayIndex({_F,R}, Elem, Von, Accu) ->
+%%   getArrayIndex(R, Elem, Von, Accu+1).
+%%
+%%
+%% %% getArrayIndex: array x pivot -> pos
+%% %% Hilfsfunktion um den Index eines bestimmten Elements zu bekommen
+%% getArrayIndex(Array, Elem) ->
+%%   getArrayIndex(Array, Elem, 0).
+%%
+%% getArrayIndex({First, _Second}, Elem, Accu) when First == Elem ->
+%%   Accu;
+%%
+%% getArrayIndex({First, Second}, Elem, Accu) when First /= Elem ->
+%%   getArrayIndex(Second, Elem, Accu +1).
 
 
 
