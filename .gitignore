@@ -1,1 +1,6 @@
 out/*
+.idea/*
+ADP-03.iml
+messung.log
+sortier.dat
+zahlen.dat
