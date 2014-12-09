@@ -1,6 +1,6 @@
-out/*
-.idea/*
-ADP-03.iml
-messung.log
-zahlen.dat
-sortiert.dat
+/src/notizen.erl
+/.idea*
+/ADP-03.iml
+/out*
+/messung.log
+/zahlen.dat
