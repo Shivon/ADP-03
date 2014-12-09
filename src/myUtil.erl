@@ -40,8 +40,7 @@ pickRandomElem(Array) ->
   % random:uniform(N) generates random Integer between 1 and N
   % To get index 0, too, need to subtract 1 at the end, therefore length array as N
   RandomIndex = random:uniform(lengthA(Array)) - 1,
-  RandomElem = getA(Array, RandomIndex),
-  RandomElem.
+  getA(Array, RandomIndex).
 
 %% Returns random element from specified range in array
 %% Returns nil if array is empty or Left is bigger than Right
@@ -49,8 +48,7 @@ pickRandomElem({}, _, _) -> nil;
 pickRandomElem(_, Left, Right) when Left > Right -> nil;
 pickRandomElem(Array, Left, Right) when Left < Right ->
   RandomIndex = random:uniform(Right-Left+1) + (Left-1),
-  RandomElem = getA(Array, RandomIndex),
-  RandomElem.
+  getA(Array, RandomIndex).
 
 
 %% Returns index of elem in array,
