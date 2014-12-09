@@ -10,8 +10,17 @@
 -author("KamikazeOnRoad").
 
 %% API
--export([pickRandomIndex/1, pickRandomIndex/3, pickRandomElem/1, pickRandomElem/3, getIndex/2]).
--import(arrayS, [lengthA/1, getA/2]).
+-export([swap/3, pickRandomIndex/1, pickRandomIndex/3, pickRandomElem/1, pickRandomElem/3, getIndex/2]).
+-import(arrayS, [lengthA/1, getA/2, setA/3]).
+
+%% Swaps 2 elements at specified indices in array and returns array
+swap({}, _, _) -> {};
+swap(Array, Index, Index) -> Array;
+swap(Array, Index1, Index2) ->
+  Elem1 = getA(Array, Index1),
+  Elem2 = getA(Array, Index2),
+  setA(setA(Array, Index1, Elem2), Index2, Elem1).
+
 
 %% Returns random index in array
 %% Returns nil if array is empty
