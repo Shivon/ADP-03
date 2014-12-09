@@ -10,10 +10,12 @@
 -author("KamikazeOnRoad").
 
 %% API
--export([quicksortRandom/1, quicksortRandom/3, swap/3]).
+%-export([quicksortRandom/1, quicksortRandom/3, swap/3, searchBigger/4, searchSmaller/4]).
+-compile(export_all).
 -import(arrayS, [lengthA/1, getA/2, setA/3]).
 -import(selectionSort, [selectionS/3]).
--import(myUtil, [pickRandom/3, getIndex/2]).
+-import(myUtil, [pickRandomIndex/3, getIndex/2]).
+-import(liste, [concat/2]).
 
 % sorts all elements of array
 quicksortRandom({}) -> {};
@@ -35,44 +37,76 @@ quicksortRandom(Array, Left, Right) when Left > Right -> Array;
 quicksortRandom(Array, Left, Right) when Left < Right ->
   %% TODO: for opimization:
   %% Length = Right-Left+1,
+  erlang:display("Test"),
   Divider = divide(Array, Left, Right),
-  quicksortRandom(Array, Left, Divider-1),
-  quicksortRandom(Array, Divider+1, Right).
+  erlang:display("yay"),
+%%   quicksortRandom(Array, Left, Divider-1),
+%%   quicksortRandom(Array, Divider+1, Right),
+  concat(concat(quicksortRandom(Array, Left, Divider-1), Divider), quicksortRandom(Array, Divider+1, Right)).
 
 
 divide(Array, Left, Right) ->
-  % get random pivot element
-  Pivot = pickRandom(Array, Left, Right),
-  divide(Array, Pivot, Left, Right),
-  getIndex(Array, Pivot).
+  %% get random pivot element
+  %% we use the index since our swap works with indices and
+  %% with the index the pivot is distinct from other possibly occuring elements with the same value
+  PivotIndex = pickRandomIndex(Array, Left, Right),
+  erlang:display("Test2"),
+  divide(Array, PivotIndex, Left, Right),
+  erlang:display("Yay2"), %% TODO: beheben: kommt schon hier nicht raus
+  getIndex(Array, PivotIndex).
 
-divide(Array, Pivot, Left, Right) when Left =:= Right ->
-  swap(Array, Left, getIndex(Array, Pivot));
+divide(Array, PivotIndex, Left, Right) when Left =:= Right ->
+  erlang:display("Left =:= Right"),
+  swap(Array, Left, getIndex(Array, PivotIndex));
 
-divide(Array, Pivot, Left, Right) when Left < Right ->
-  swap(Array, searchBigger(Array, Pivot, Left, Right), searchSmaller(Array, Pivot, Left, Right)),
-  divide(Array, Pivot, Left +1, Right -1);
+divide(Array, PivotIndex, Left, Right) when Left < Right ->
+  erlang:display("PivotIndex Left < Right"),
+  erlang:display(PivotIndex),
+  Bigger = searchBigger(Array, PivotIndex, Left, Right),
+  erlang:display("Bigger Left < Right"),
+  erlang:display(Bigger),
+  Smaller = searchSmaller(Array, PivotIndex, Left, Right),
+  erlang:display("Smaller Left < Right"),
+  erlang:display(Smaller), % dies hier noch gedruckt
+  ArrayNew = swap(Array, Bigger, Smaller),  %% TODO <= hier hängt es ?!!!??
+  %%swap(Array, searchBigger(Array, Pivot, Left, Right), searchSmaller(Array, Pivot, Left, Right)),
+  erlang:display("Swap Left < Right"),
+  divide(ArrayNew, PivotIndex, Left +1, Right -1);
+  %%divide(Array, Pivot, Left +1, Right -1);
 
-divide(Array, Pivot, Left, Right) when Left > Right ->
-  swap(Array, Left, getIndex(Array, Pivot)).
+divide(Array, PivotIndex, Left, Right) when Left > Right ->
+  erlang:display("Left > Right"),
+  swap(Array, Left, PivotIndex).
 
 
-
-searchBigger(Array, Pivot, Left, Right) when Left < Right ->
+searchBigger(Array, PivotIndex, Left, Left) ->
   ElemLeft = getA(Array, Left),
+  PivotElem = getA(Array, PivotIndex),
   if
-    ElemLeft > Pivot -> ElemLeft;
-    ElemLeft =< Pivot -> searchBigger(Array, Pivot, Left+1, Right)
+    %% if last elem in array is bigger than pivot elem
+    ElemLeft > PivotElem -> Left;
+    %% if pivot is biggest elem in array    TODO: maybe change return value? not sure if works
+    ElemLeft =< PivotElem -> PivotIndex
+  end;
+searchBigger(Array, PivotIndex, Left, Right) when Left < Right ->
+  ElemLeft = getA(Array, Left),
+  PivotElem = getA(Array, PivotIndex),
+  if
+    ElemLeft > PivotElem -> Left;
+    ElemLeft =< PivotElem -> searchBigger(Array, PivotIndex, Left+1, Right)
   end.
 
-searchSmaller(Array, Pivot, Left, Right) when Left < Right ->
+searchSmaller(_, _, Right, Right) -> ok;
+searchSmaller(Array, PivotIndex, Left, Right) when Left < Right ->
   ElemRight = getA(Array, Right),
+  PivotElem = getA(Array, PivotIndex),
   if
-    ElemRight < Pivot -> ElemRight;
-    ElemRight >= Pivot -> searchSmaller(Array, Pivot, Left, Right-1)
+    ElemRight < PivotElem -> Right;
+    ElemRight >= PivotElem -> searchSmaller(Array, PivotIndex, Left, Right-1)
   end.
 
-% Swaps 2 elements in array and returns array
+% Swaps 2 elements at specified indices in array and returns array
+%%%%%%%%%%%%%%%%% NOTIZ: Läuft
 swap({}, _, _) -> {};
 swap(Array, Index, Index) -> Array;
 swap(Array, Index1, Index2) ->
