@@ -119,11 +119,11 @@ swapPivot(Array, L, _R, IndexLinks, _IndexRechts, Pivot) ->
   erlang:display(Pivot),
   if(Elem > Pivot) ->
       erlang:display("elem > pivot   "),
-      Array1 = quicksortRandom:swap(Array, L-1, IndexLinks),
+      Array1 = myUtil:swap(Array, L-1, IndexLinks);
       IndexPivot = L-1;
   true ->
       erlang:display("elem =< pivot   "),
-      Array1 = quicksortRandom:swap(Array, L, IndexLinks),
+      Array1 = myUtil:swap(Array, L, IndexLinks),
       IndexPivot = L
   end,
   erlang:display("Array1   "),
@@ -150,7 +150,7 @@ swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot) ->
   erlang:display("NewR   "),
   erlang:display(NewR),
   if(NewL < NewR) ->
-    Array1 = quicksortRandom:swap(Array, NewL, NewR),
+    Array1 = myUtil:swap(Array, NewL, NewR),
     swapPivot(Array1, NewL, NewR, IndexLinks, IndexRechts, Pivot);
   true ->
     swapPivot(Array, NewL, NewR, IndexLinks, IndexRechts, Pivot)
