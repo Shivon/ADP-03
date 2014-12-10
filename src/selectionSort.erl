@@ -10,46 +10,19 @@
 -author("KamikazeOnRoad").
 
 %% API
--export([selectionS/0, selectionS/1, selectionS/3]).
+-export([selectionS/3]).
 -import(arrayS, [initA/0, setA/3, getA/2, lengthA/1]).
 -import(sortNum, [sortNum/0, sortNum/1]).
 -import(generateOutputfile, [writeToFile/2]).
 -import(myUtil, [getIndex/2, deleteA/2, getMinimum/1, getSectorArray/3]).
+%%-import(inputOutput, [executeSorting/1, executeSorting/2]).
 
 
-%% Uses as input array as default the arrays of integers in zahlen.dat
-%% Sorts automatically all integers in each line
-selectionS() ->
-  selectionSortOverFileLines("\zahlen.dat").
-
-%% Name of file can be manually entered if you wish to use another file
-selectionS(FileName) ->
-  selectionSortOverFileLines(FileName).
-
-%% Opens file and iterates over all tuples
-selectionSortOverFileLines(FileName) ->
-  %% Returns {ok, List of all tuples}
-  Tuples = tuple_to_list(file:consult(FileName)),
-  % Initializes output file
-  file:write_file("sortiert.dat", []),
-  %% We need to pick last element of list because of "ok" return in Tuples
-  selectionSortOverTuples(lists:last(Tuples)).
-
-%% Exit condition: List of Tuples only has one element (left)
-selectionSortOverTuples([Tuple]) ->
-  FileName = "sortiert.dat",
-  Von = 0,
-  Bis = lengthA(Tuple),
-  file:write_file(FileName, io_lib:fwrite("~p.\n", [selectionS(Tuple, Von, Bis)]), [append]);
-%% Picks head of list, recursive call
-selectionSortOverTuples([Tuple|Rest]) ->
-  FileName = "sortiert.dat",
-  Von = 0,
-  Bis = lengthA(Tuple),
-  file:write_file(FileName, io_lib:fwrite("~p.\n", [selectionS(Tuple, Von, Bis)]), [append]),
-  selectionSortOverTuples(Rest).
-
-
+%% %% Calls function in inputOutput file for executing read and write
+%% selectionS() -> executeSorting(selectionS).
+%%
+%% %% Calls function in inputOutput file for executing read and write
+%% selectionS(Filename) -> executeSorting(Filename, selectionS).
 
 %% Von = Index from which you want to start sorting
 %% Bis = Index which shall be the last sorted
