@@ -10,8 +10,9 @@
 -author("KamikazeOnRoad").
 
 %% API
--export([swap/3, pickRandomIndex/1, pickRandomIndex/3, pickRandomElem/1, pickRandomElem/3, getIndex/2]).
--import(arrayS, [lengthA/1, getA/2, setA/3]).
+-export([swap/3, getSectorArray/3, pickRandomIndex/1, pickRandomIndex/3, pickRandomElem/1, pickRandomElem/3, getIndex/2, deleteA/2, getMinimum/1]).
+-import(arrayS, [initA/0, setA/3, getA/2, lengthA/1]).
+-import(liste, [delete/2]).
 
 %% Swaps 2 elements at specified indices in array and returns array
 swap({}, _, _) -> {};
@@ -20,6 +21,26 @@ swap(Array, Index1, Index2) ->
   Elem1 = getA(Array, Index1),
   Elem2 = getA(Array, Index2),
   setA(setA(Array, Index1, Elem2), Index2, Elem1).
+
+
+%% Returns the sector of the an array
+getSectorArray(Array, Von, Bis) ->
+  LastIndex = lengthA(Array)-1,
+  if
+    (Von =:= 0) and (Bis =:= LastIndex) -> Array;
+    (LastIndex < Bis) -> getSectorArray(Array, Von, LastIndex, initA(), 0);
+    true -> getSectorArray(Array, Von, Bis, initA(), 0)
+  end.
+
+getSectorArray(Array, Von, Bis, Output, SetElem) ->
+  LengthArray = lengthA(Array),
+  ActualElem = getA(Array, Von),
+  if
+    LengthArray =:= 0 -> Output;
+    (LengthArray > 0) and (Von =:= Bis) -> setA(Output, SetElem, ActualElem);
+    (LengthArray > 0) and (Von < Bis) ->
+      getSectorArray(deleteA(Array, Von), Von, Bis-1, setA(Output, SetElem, ActualElem), SetElem+1)
+  end.
 
 
 %% Returns random index in array
@@ -72,4 +93,26 @@ getIndex(Array, Elem, AccuIndex) ->
     (AccuIndex < Length) andalso (ElemAccuIndex =:= Elem) -> AccuIndex;
     (AccuIndex < Length) andalso (ElemAccuIndex =/= Elem) -> getIndex(Array, Elem, AccuIndex+1);
     true -> false
+  end.
+
+
+%% Deletes Element at index of array and returns array
+deleteA(Array, Index) ->
+  delete(Array, Index+1).
+
+
+%% Return minimum in array
+getMinimum({}) -> false;
+getMinimum({Elem, {}}) -> Elem;
+getMinimum(Array) ->
+  getMinimum(Array, 0, getA(Array, 0)).
+
+getMinimum(Array, ActualIndex, Minimum) ->
+  Length = lengthA(Array),
+  ActualElem = getA(Array, ActualIndex),
+  if
+    (ActualElem =< Minimum) and (ActualIndex =:= Length-1) -> ActualElem;
+    (ActualElem =< Minimum) and (ActualIndex < Length-1) -> getMinimum(Array, ActualIndex+1, ActualElem);
+    (ActualElem > Minimum) and (ActualIndex =:= Length-1) -> Minimum;
+    (ActualElem > Minimum) and (ActualIndex < Length-1) -> getMinimum(Array, ActualIndex+1, Minimum)
   end.

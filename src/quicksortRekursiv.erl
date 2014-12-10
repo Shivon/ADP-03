@@ -117,9 +117,10 @@ swapPivot(Array, L, _R, IndexLinks, _IndexRechts, Pivot) ->
   erlang:display(Elem),
   erlang:display("Pivot"),
   erlang:display(Pivot),
-  if(Elem > Pivot) ->
+  if
+    (Elem > Pivot) ->
       erlang:display("elem > pivot   "),
-      Array1 = myUtil:swap(Array, L-1, IndexLinks);
+      Array1 = myUtil:swap(Array, L-1, IndexLinks),
       IndexPivot = L-1;
   true ->
       erlang:display("elem =< pivot   "),
