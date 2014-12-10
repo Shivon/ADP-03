@@ -11,48 +11,10 @@
 
 %% API
 -export([quicksortRekursiv/4, quicksortRekursiv/3, increment_R/4, increment_L/4, swapPivot/3]).
+%%-import(generateOutputfile, [writeToFile/2]).
 %% -include_lib("eunit/include/eunit.hrl").
 
-%% "Konstante"
 logFile() -> "\messung.log".
-
-
-
-%% %% Uses as input array as default the arrays of integers in zahlen.dat
-%% %% Sorts automatically all integers in each line
-%% quicksortRekursiv() ->
-%%   quicksortRekursivOverFileLines("\zahlen.dat").
-%%
-%% %% Name of file can be manually entered if you wish to use another file
-%% quicksortRekursiv(FileName) ->
-%%   quicksortRekursivOverFileLines(FileName).
-%%
-%% %% Opens file and iterates over all tuples
-%% quicksortRekursivOverFileLines(FileName) ->
-%%   %% Returns {ok, List of all tuples}
-%%   Tuples = tuple_to_list(file:consult(FileName)),
-%%   % Initializes output file
-%%   file:write_file("sortiert.dat", []),
-%%   %% We need to pick last element of list because of "ok" return in Tuples
-%%   quicksortRekursivOverTuples(lists:last(Tuples)).
-%%
-%% %% Exit condition: List of Tuples only has one element (left)
-%% quicksortRekursivOverTuples([Tuple]) ->
-%%   FileName = "sortiert.dat",
-%%   IndexLinks = 0,
-%%   IndexRechts = arrayS:lengthA(Tuple),
-%%   file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRekursiv(Tuple, IndexLinks, IndexRechts)]), [append]);
-%% %% Picks head of list, recursive call
-%% quicksortRekursivOverTuples([Tuple|Rest]) ->
-%%   FileName = "sortiert.dat",
-%%   IndexLinks = 0,
-%%   IndexRechts = arrayS:lengthA(Tuple),
-%%   file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRekursiv(Tuple, IndexLinks, IndexRechts)]), [append]),
-%%   quicksortRekursivOverTuples(Rest).
-%%
-%%
-
-
 
 quicksortRekursiv(Array, IndexLinks, IndexRechts, time) ->
   %% Zeit vor dem Algorithmus

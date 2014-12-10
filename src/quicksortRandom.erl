@@ -14,7 +14,7 @@
 -import(selectionSort, [selectionS/3]).
 -import(myUtil, [pickRandomElem/1, getSectorArray/3]).
 -import(liste, [concat/2]).
--import(arrayS, [setA/3, lengthA/1]).
+-import(arrayS, [initA/0, setA/3, lengthA/1]).
 -import(generateOutputfile, [writeToFile/2]).
 -import(insertionSort, [unsortedFront/2, unsortedEnd/2]).
 
@@ -47,9 +47,9 @@ quicksortRandom(Array) ->
   %% This won't be saved separately since it will appear in the array Equal
   Pivot = pickRandomElem(Array),
 
-  Smaller = quicksortRandom(searchSmaller(Array, Pivot, {})),
+  Smaller = quicksortRandom(searchSmaller(Array, Pivot, initA())),
   Equal = searchEqual(Array, Pivot, {}),
-  Bigger = quicksortRandom(searchBigger(Array, Pivot, {})),
+  Bigger = quicksortRandom(searchBigger(Array, Pivot, initA())),
 
   concat(concat(Smaller, Equal), Bigger).
 
