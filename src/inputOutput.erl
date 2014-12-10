@@ -39,7 +39,7 @@ readOverTuples([Tuple], Algorithm) ->
     Algorithm =:= quicksortRandom ->
       file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRandom(Tuple, Von, Bis)]), [append]);
     Algorithm =:= quicksortRekursiv ->
-      file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRekursiv(Tuple, Von, Bis, time)]), [append]);
+      file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRekursiv(Tuple, Von, Bis-1, time)]), [append]);
     Algorithm =:= selectionS ->
       file:write_file(FileName, io_lib:fwrite("~p.\n", [selectionS(Tuple, Von, Bis)]), [append]);
     Algorithm =:= insertionS ->
@@ -54,7 +54,7 @@ readOverTuples([Tuple|Rest], Algorithm) ->
     Algorithm =:= quicksortRandom ->
       file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRandom(Tuple, Von, Bis)]), [append]);
     Algorithm =:= quicksortRekursiv ->
-      file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRekursiv(Tuple, Von, Bis, time)]), [append]);
+      file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRekursiv(Tuple, Von, Bis-1, time)]), [append]);
     Algorithm =:= selectionS ->
       file:write_file(FileName, io_lib:fwrite("~p.\n", [selectionS(Tuple, Von, Bis)]), [append]);
     Algorithm =:= insertionS ->
