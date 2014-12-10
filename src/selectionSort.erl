@@ -18,14 +18,6 @@
 %%-import(inputOutput, [executeSorting/1, executeSorting/2]).
 
 
-%% %% Calls function in inputOutput file for executing read and write
-%% selectionS() -> executeSorting(selectionS).
-%%
-%% %% Calls function in inputOutput file for executing read and write
-%% selectionS(Filename) -> executeSorting(Filename, selectionS).
-
-%% Von = Index from which you want to start sorting
-%% Bis = Index which shall be the last sorted
 selectionS(Array, Von, Bis) ->
   UnsortedFront = insertionSort:unsortedFront(Array, Von),
 
@@ -54,3 +46,13 @@ selectionS(Array, SortedArray, CountSortedElem, _) ->
         setA(SortedArray, CountSortedElem, Minimum),
         CountSortedElem+1, 0)
   end.
+
+
+%% %% Calls function in inputOutput file for executing read and write
+%% selectionS() -> executeSorting(selectionS).
+%%
+%% %% Calls function in inputOutput file for executing read and write
+%% selectionS(Filename) -> executeSorting(Filename, selectionS).
+
+%% Von = Index from which you want to start sorting
+%% Bis = Index which shall be the last sorted
