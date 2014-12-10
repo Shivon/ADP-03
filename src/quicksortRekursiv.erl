@@ -58,11 +58,12 @@ quicksortRekursiv(Array, IndexLinks, IndexRechts, time) ->
   %% Zeit vor dem Algorithmus
   {_, Seconds, MicroSecs} = now(),
   %% Algorithmus ausführen
-  quicksortRekursiv(Array, IndexLinks, IndexRechts),
+  Array1 = quicksortRekursiv(Array, IndexLinks, IndexRechts),
   %% Zeit nach dem Algorithmus
   {_, Seconds1, MicroSecs1} = now(),
   DiffTime = ((Seconds1-Seconds)+(MicroSecs1-MicroSecs)/1000000),
-  writeToFile(DiffTime, newline).
+  writeToFile(DiffTime, newline),
+  Array1.
 
 
 %% quicksortRekursiv: array x linkerIndex x rechterIndex -> array
