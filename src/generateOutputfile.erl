@@ -15,5 +15,10 @@
 
 logFile() -> "\messung.log".
 
+%% Writes time needed for algorithm in milliseconds into "messung.log"
 writeToFile(Data, newline) ->
-  file:write_file(logFile(), io_lib:fwrite("~p\t Millisekunden.\n",   [Data]), [append]).
+  file:write_file(logFile(), io_lib:fwrite("~p\t Millisekunden.\n",   [Data]), [append]);
+
+%% Writes numbers of comparisons into "messung.log"
+writeToFile(Data, sameline) ->
+  file:write_file(logFile(), io_lib:fwrite("~p\t Tausche bei\t",   [Data]), [append]).

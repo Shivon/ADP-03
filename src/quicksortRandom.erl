@@ -44,7 +44,7 @@ quicksortRandom(Array, Left, Right) when (Right - Left) >= 11 ->
 quicksortRandom({}) -> {};
 quicksortRandom(Array) ->
   %% Searches random pivot element (value, not index)
-  %% This won't be saved separately since it will appear in the array Equal
+  %% This won't be saved separately since it will appear in the array "Equal"
   Pivot = pickRandomElem(Array),
 
   Smaller = quicksortRandom(searchSmaller(Array, Pivot, initA())),
