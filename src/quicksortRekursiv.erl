@@ -70,17 +70,11 @@ quicksortRekursiv(Array, IndexLinks, IndexRechts, time) ->
 %% rechterIndex: Index, bis der sortiert werden soll
 quicksortRekursiv(Array, IndexLinks, IndexRechts) when IndexLinks < IndexRechts ->
   Laenge = arrayS:lengthA(Array),
-  if(Laenge < 13) ->
+  if(Laenge < 12) ->
     selectionSort:selectionS(Array, IndexLinks, IndexRechts);
   true ->
     {Array1, IndexPivot} = swapPivot(Array, IndexLinks, IndexRechts),
     Array2 = quicksortRekursiv(Array1, IndexLinks, IndexPivot-1),
-%%     erlang:display("Array2  "),
-%%     erlang:display(Array2),
-%%     erlang:display("IndexPivot+1  "),
-%%     erlang:display(IndexPivot+1),
-%%     erlang:display("IndexRechts+1  "),
-%%     erlang:display(IndexRechts),
     quicksortRekursiv(Array2, IndexPivot+1, IndexRechts)
   end;
 
@@ -104,7 +98,6 @@ swapPivot(Array, IndexLinks, IndexRechts) ->
 %% soll der Platz für das Pivot gesucht werden mit Hilfe der Hilfsfunktion/Unterfunktion:
 %% swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot).
 swapPivot(Array, L, R, IndexLinks, IndexRechts, Pivot) when  L < R ->
-%%  erlang:display(Array),
   swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot);
 
 
@@ -113,25 +106,13 @@ swapPivot(Array, L, R, IndexLinks, IndexRechts, Pivot) when  L < R ->
 %% dort stehenden Element getauscht.
 swapPivot(Array, L, _R, IndexLinks, _IndexRechts, Pivot) ->
   Elem = arrayS:getA(Array, L),
-%%   erlang:display("Elem"),
-%%   erlang:display(Elem),
-%%   erlang:display("Pivot"),
-%%   erlang:display(Pivot),
-  if
-    (Elem > Pivot) ->
-%%       erlang:display("elem > pivot   "),
+   if(Elem > Pivot) ->
       Array1 = myUtil:swap(Array, L-1, IndexLinks),
       IndexPivot = L-1;
   true ->
-%%       erlang:display("elem =< pivot   "),
       Array1 = myUtil:swap(Array, L, IndexLinks),
       IndexPivot = L
   end,
-%%   erlang:display("Array1   "),
-%%   erlang:display(Array1),
-%%   erlang:display("  "),
-%%   erlang:display("IndexPivot   "),
-%%   erlang:display(IndexPivot),
   {Array1, IndexPivot}.
 
 
@@ -146,10 +127,6 @@ swapPivot(Array, L, _R, IndexLinks, _IndexRechts, Pivot) ->
 swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot) ->
   NewL = increment_L(Array, L, IndexRechts, Pivot),
   NewR = increment_R(Array, R, IndexLinks, Pivot),
-%%   erlang:display("NewL   "),
-%%   erlang:display(NewL),
-%%   erlang:display("NewR   "),
-%%   erlang:display(NewR),
   if(NewL < NewR) ->
     Array1 = myUtil:swap(Array, NewL, NewR),
     swapPivot(Array1, NewL, NewR, IndexLinks, IndexRechts, Pivot);
@@ -163,7 +140,7 @@ swapPivot_(Array, L, R, IndexLinks, IndexRechts, Pivot) ->
 %%      HILFSFUNKTIONEN
 %%      - increment_L/4
 %%      - increment_R/4
-%%      - getArrayIndex/2
+%%      - writeToFile/2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
