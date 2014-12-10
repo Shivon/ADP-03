@@ -62,7 +62,11 @@ quicksortRekursiv(Array, IndexLinks, IndexRechts, time) ->
   %% Zeit nach dem Algorithmus
   {_, Seconds1, MicroSecs1} = now(),
   DiffTime = ((Seconds1-Seconds)+(MicroSecs1-MicroSecs)/1000000),
+  quicksortRekursiv_swapcount:quicksortRekursiv(Array, IndexLinks, IndexRechts, counter),
+  SwapCount = util:countread(swap),
+  writeToFile(SwapCount, sameline),
   writeToFile(DiffTime, newline),
+  util:countreset(swap),
   Array1.
 
 
