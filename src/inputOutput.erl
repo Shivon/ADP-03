@@ -6,15 +6,29 @@
 %%% @end
 %%% Created : 10. Dez 2014 01:41
 %%%-------------------------------------------------------------------
--module(readInputfile).
+-module(inputOutput).
 -author("KamikazeOnRoad").
 
 %% API
--export([readOverFileLines/1]).
+-export([readAndWrite/0, readAndWrite/1]).
 -import(arrayS, [lengthA/1]).
+-import(quicksortRandom, [quicksortRandom/3]).
+-import(quicksortRekursiv, [quicksortRekursiv/3]).
 
 
--import(selectionSort, [selectionS/3]).  %% TODO remove
+%% TODO: nice-to-have: set algorithm with parameter
+%% executeSorting(Filename, Algorithm) ->
+%%   readOverFileLines(Filename, Algorithm).
+
+
+%% Uses as input array as default the arrays of integers in zahlen.dat
+%% Sorts automatically all integers in each line
+readAndWrite() -> readOverFileLines("\zahlen.dat").
+
+
+%% Name of file can be manually entered if you wish to use another file
+readAndWrite(FileName) -> readOverFileLines(FileName).
+
 
 %% Opens file and iterates over all tuples
 readOverFileLines(FileName) ->
@@ -30,24 +44,11 @@ readOverTuples([Tuple]) ->
   FileName = "sortiert.dat",
   Von = 0,
   Bis = lengthA(Tuple),
-  file:write_file(FileName, io_lib:fwrite("~p.\n", [selectionS(Tuple, Von, Bis)]), [append]);
+  file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRandom(Tuple, Von, Bis)]), [append]);
 %% Picks head of list, recursive call
 readOverTuples([Tuple|Rest]) ->
   FileName = "sortiert.dat",
   Von = 0,
   Bis = lengthA(Tuple),
-  file:write_file(FileName, io_lib:fwrite("~p.\n", [selectionS(Tuple, Von, Bis)]), [append]),
+  file:write_file(FileName, io_lib:fwrite("~p.\n", [quicksortRandom(Tuple, Von, Bis)]), [append]),
   readOverTuples(Rest).
-
-
-
-%%
-%%
-%% %% Uses as input array as default the arrays of integers in zahlen.dat
-%% %% Sorts automatically all integers in each line
-%% selectionS() ->
-%%   selectionSortOverFileLines("\zahlen.dat").
-%%
-%% %% Name of file can be manually entered if you wish to use another file
-%% selectionS(FileName) ->
-%%   selectionSortOverFileLines(FileName).

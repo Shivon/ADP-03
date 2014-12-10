@@ -10,8 +10,7 @@
 -author("KamikazeOnRoad").
 
 %% API
--export([quicksortRandom/1, quicksortRandom/3]).
-%% Note: Logging the time works only for quicksortRandom/3
+-export([quicksortRandom/3]).
 -import(selectionSort, [selectionS/3]).
 -import(myUtil, [pickRandomElem/1, getSectorArray/3]).
 -import(liste, [concat/2]).
@@ -20,19 +19,11 @@
 -import(insertionSort, [unsortedFront/2, unsortedEnd/2]).
 
 
-%% quicksortRandomNew(Array) ->
-%%   Length = lengthA(Array),
-%%   if
-%%     Length < 12 -> selectionS(Array, 0, Length-1);
-%%     Length >= 12 -> quicksortRandom(Array, 0, Length-1)
-%%   end.
-%%
-%% quicksortRandomNew({}, _, _) -> {};
-%% quicksortRandomNew({First, Rest}, Left, R)
-
-
 quicksortRandom({}, _, _) -> {};
-quicksortRandom(Array, Left, Right) ->
+quicksortRandom(Array, Same, Same) -> Array;
+quicksortRandom(Array, Left, Right) when (Right - Left) < 11 ->
+  selectionS(Array, Left, Right);
+quicksortRandom(Array, Left, Right) when (Right - Left) >= 11 ->
   UnsortedFront = unsortedFront(Array, Left),
 
   %% Time before algorithm
